@@ -18,6 +18,31 @@
             line-height: 1.6;
         }
 
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #667eea;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .lang-toggle:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
         /* Header */
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -281,6 +306,13 @@
                 padding: 0.5rem 1rem;
                 font-size: 0.9rem;
             }
+
+            .lang-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
         }
 
         .hidden {
@@ -289,6 +321,8 @@
     </style>
 </head>
 <body>
+    <button class="lang-toggle" onclick="toggleLanguage()">EN</button>
+
     <header>
         <h1>Chan's Watercolor</h1>
         <!-- <p>探索水彩的诗意与色彩</p> -->
@@ -296,10 +330,10 @@
 
     <nav>
         <div class="nav-container">
-            <button class="filter-btn active" data-category="all">全部作品</button>
-            <button class="filter-btn" data-category="flowers">花卉</button>
-            <button class="filter-btn" data-category="sketches">速写</button>
-            <button class="filter-btn" data-category="landscapes">风景</button>
+            <button class="filter-btn active" data-category="all" data-lang-key="nav_all">全部作品</button>
+            <button class="filter-btn" data-category="flowers" data-lang-key="nav_flowers">花卉</button>
+            <button class="filter-btn" data-category="sketches" data-lang-key="nav_sketches">速写</button>
+            <button class="filter-btn" data-category="landscapes" data-lang-key="nav_landscapes">风景</button>
         </div>
     </nav>
 
@@ -310,20 +344,22 @@
     </div>
 
     <div class="about-section">
-        <h2>关于艺术家</h2>
-        <p>欢迎来到我的水彩艺术世界。我热衷于用水彩捕捉生活中的美好瞬间，从绚烂的花卉到日常的速写，每一幅作品都承载着我对色彩和光影的理解。</p>
-        <p>水彩的流动性和不可预测性让每次创作都充满惊喜。我希望通过这些作品，与您分享水彩艺术的独特魅力。</p>
-        <p>如果您对任何作品感兴趣或想要定制作品，欢迎随时联系我。</p>
+        <h2 data-lang-key="about_title">关于艺术家</h2>
+        <div data-lang-key="about_content">
+            <p>欢迎来到我的水彩艺术世界。我热衷于用水彩捕捉生活中的美好瞬间，从绚烂的花卉到日常的速写，每一幅作品都承载着我对色彩和光影的理解。</p>
+            <p>水彩的流动性和不可预测性让每次创作都充满惊喜。我希望通过这些作品，与您分享水彩艺术的独特魅力。</p>
+            <p>如果您对任何作品感兴趣或想要定制作品，欢迎随时联系我。</p>
+        </div>
     </div>
 
     <div class="contact-section">
-        <h2>联系我</h2>
-        <p>作品咨询 | 定制委托 | 合作洽谈</p>
-        <a href="mailto:chanwang15@example.com" class="contact-btn">发送邮件</a>
+        <h2 data-lang-key="contact_title">联系我</h2>
+        <p data-lang-key="contact_subtitle">作品咨询 | 定制委托 | 合作洽谈</p>
+        <a href="mailto:your.email@example.com" class="contact-btn" data-lang-key="contact_btn">发送邮件</a>
     </div>
 
     <footer>
-        <p>&copy; 2026 Chan's Watercolor Art. All rights reserved.</p>
+        <p data-lang-key="footer_text">&copy; 2026 Chan's Watercolor. All rights reserved.</p>
     </footer>
 
     <!-- Lightbox -->
@@ -339,72 +375,177 @@
     </div>
 
     <script>
-        // Sample artwork data - 你可以替换成真实的作品数据
+        // Language translations
+        const translations = {
+            zh: {
+                nav_all: '全部作品',
+                nav_flowers: '花卉',
+                nav_sketches: '速写',
+                nav_landscapes: '风景',
+                about_title: '关于艺术家',
+                about_content: `
+                    <p>欢迎来到我的水彩艺术世界。我热衷于用水彩捕捉生活中的美好瞬间，从绚烂的花卉到日常的速写，每一幅作品都承载着我对色彩和光影的理解。</p>
+                    <p>水彩的流动性和不可预测性让每次创作都充满惊喜。我希望通过这些作品，与您分享水彩艺术的独特魅力。</p>
+                    <p>如果您对任何作品感兴趣或想要定制作品，欢迎随时联系我。</p>
+                `,
+                contact_title: '联系我',
+                contact_subtitle: '作品咨询 | 定制委托 | 合作洽谈',
+                contact_btn: '发送邮件',
+                footer_text: '© 2026 Chan\'s Watercolor. All rights reserved.',
+                category_flowers: '花卉',
+                category_sketches: '速写',
+                category_landscapes: '风景'
+            },
+            en: {
+                nav_all: 'All Works',
+                nav_flowers: 'Florals',
+                nav_sketches: 'Sketches',
+                nav_landscapes: 'Landscapes',
+                about_title: 'About the Artist',
+                about_content: `
+                    <p>Welcome to my watercolor art world. I'm passionate about capturing beautiful moments in life through watercolor—from vibrant florals to everyday sketches. Each piece embodies my understanding of color and light.</p>
+                    <p>The fluidity and unpredictability of watercolor make every creation full of surprises. Through these works, I hope to share the unique charm of watercolor art with you.</p>
+                    <p>If you're interested in any artwork or would like to commission a custom piece, please feel free to contact me.</p>
+                `,
+                contact_title: 'Contact Me',
+                contact_subtitle: 'Artwork Inquiries | Commissions | Collaborations',
+                contact_btn: 'Send Email',
+                footer_text: '© 2026 Chan\'s Watercolor. All rights reserved.',
+                category_flowers: 'Florals',
+                category_sketches: 'Sketches',
+                category_landscapes: 'Landscapes'
+            }
+        };
+
+        // Sample artwork data with bilingual content
         const artworks = [
             {
                 id: 1,
-                title: '春日牡丹',
+                title: { zh: '春日牡丹', en: 'Spring Peony' },
                 category: 'flowers',
                 image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800',
-                description: '盛开的牡丹，层层叠叠的花瓣展现着春天的生机'
+                description: { 
+                    zh: '盛开的牡丹，层层叠叠的花瓣展现着春天的生机',
+                    en: 'Blooming peony with layered petals showcasing spring vitality'
+                }
             },
             {
                 id: 2,
-                title: '街角咖啡馆',
+                title: { zh: '街角咖啡馆', en: 'Corner Café' },
                 category: 'sketches',
                 image: 'https://images.unsplash.com/photo-1501482263322-6330ae5814e7?w=800',
-                description: '午后阳光下的街角，快速捕捉的都市瞬间'
+                description: { 
+                    zh: '午后阳光下的街角，快速捕捉的都市瞬间',
+                    en: 'Urban moment captured at a sunlit street corner'
+                }
             },
             {
                 id: 3,
-                title: '紫藤花开',
+                title: { zh: '紫藤花开', en: 'Wisteria Blossoms' },
                 category: 'flowers',
                 image: 'https://images.unsplash.com/photo-1464699908537-0954e50791ee?w=800',
-                description: '垂落的紫藤如瀑布般倾泻，淡紫色的梦幻'
+                description: { 
+                    zh: '垂落的紫藤如瀑布般倾泻，淡紫色的梦幻',
+                    en: 'Cascading wisteria blooms like a dreamy purple waterfall'
+                }
             },
             {
                 id: 4,
-                title: '山间晨雾',
+                title: { zh: '山间晨雾', en: 'Mountain Morning Mist' },
                 category: 'landscapes',
                 image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
-                description: '清晨的薄雾笼罩山间，水彩的渲染恰到好处'
+                description: { 
+                    zh: '清晨的薄雾笼罩山间，水彩的渲染恰到好处',
+                    en: 'Morning mist enveloping mountains, perfectly rendered in watercolor'
+                }
             },
             {
                 id: 5,
-                title: '野花小径',
+                title: { zh: '野花小径', en: 'Wildflower Path' },
                 category: 'flowers',
                 image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800',
-                description: '路边的野花，简单却充满生命力'
+                description: { 
+                    zh: '路边的野花，简单却充满生命力',
+                    en: 'Roadside wildflowers, simple yet full of vitality'
+                }
             },
             {
                 id: 6,
-                title: '老城区写生',
+                title: { zh: '老城区写生', en: 'Old Town Study' },
                 category: 'sketches',
                 image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800',
-                description: '古老建筑的线条和光影记录'
+                description: { 
+                    zh: '古老建筑的线条和光影记录',
+                    en: 'Recording lines and shadows of historic architecture'
+                }
             },
             {
                 id: 7,
-                title: '玫瑰花束',
+                title: { zh: '玫瑰花束', en: 'Rose Bouquet' },
                 category: 'flowers',
                 image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800',
-                description: '红玫瑰的热烈与柔美'
+                description: { 
+                    zh: '红玫瑰的热烈与柔美',
+                    en: 'Passionate yet delicate red roses'
+                }
             },
             {
                 id: 8,
-                title: '海边日落',
+                title: { zh: '海边日落', en: 'Coastal Sunset' },
                 category: 'landscapes',
                 image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
-                description: '海天一色的黄昏时刻'
+                description: { 
+                    zh: '海天一色的黄昏时刻',
+                    en: 'Twilight where sea meets sky in harmony'
+                }
             },
             {
                 id: 9,
-                title: '市场一角',
+                title: { zh: '市场一角', en: 'Market Corner' },
                 category: 'sketches',
                 image: 'https://images.unsplash.com/photo-1533050487297-09b450131914?w=800',
-                description: '熙熙攘攘的市场，烟火人间'
+                description: { 
+                    zh: '熙熙攘攘的市场，烟火人间',
+                    en: 'Bustling market capturing everyday life'
+                }
             }
         ];
+
+        // Current language
+        let currentLang = localStorage.getItem('language') || 'zh';
+
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setLanguage(currentLang);
+        });
+
+        // Toggle language
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            localStorage.setItem('language', currentLang);
+            setLanguage(currentLang);
+        }
+
+        // Set language
+        function setLanguage(lang) {
+            // Update language toggle button
+            document.querySelector('.lang-toggle').textContent = lang === 'zh' ? 'EN' : '中文';
+            
+            // Update all elements with language keys
+            document.querySelectorAll('[data-lang-key]').forEach(el => {
+                const key = el.getAttribute('data-lang-key');
+                if (translations[lang][key]) {
+                    if (key === 'about_content') {
+                        el.innerHTML = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            // Re-render gallery with current language
+            renderGallery(document.querySelector('.filter-btn.active').dataset.category);
+        }
 
         // Render gallery
         function renderGallery(filterCategory = 'all') {
@@ -415,23 +556,18 @@
             
             gallery.innerHTML = filteredArtworks.map(art => `
                 <div class="artwork-card" onclick="openLightbox(${art.id})">
-                    <img src="${art.image}" alt="${art.title}" class="artwork-image">
+                    <img src="${art.image}" alt="${art.title[currentLang]}" class="artwork-image">
                     <div class="artwork-info">
                         <span class="artwork-category">${getCategoryName(art.category)}</span>
-                        <h3 class="artwork-title">${art.title}</h3>
-                        <p class="artwork-description">${art.description}</p>
+                        <h3 class="artwork-title">${art.title[currentLang]}</h3>
+                        <p class="artwork-description">${art.description[currentLang]}</p>
                     </div>
                 </div>
             `).join('');
         }
 
         function getCategoryName(category) {
-            const names = {
-                'flowers': '花卉',
-                'sketches': '速写',
-                'landscapes': '风景'
-            };
-            return names[category] || category;
+            return translations[currentLang][`category_${category}`] || category;
         }
 
         // Filter functionality
@@ -448,8 +584,8 @@
             const artwork = artworks.find(art => art.id === id);
             if (artwork) {
                 document.getElementById('lightbox-img').src = artwork.image;
-                document.getElementById('lightbox-title').textContent = artwork.title;
-                document.getElementById('lightbox-description').textContent = artwork.description;
+                document.getElementById('lightbox-title').textContent = artwork.title[currentLang];
+                document.getElementById('lightbox-description').textContent = artwork.description[currentLang];
                 document.getElementById('lightbox').classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
