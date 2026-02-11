@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chan's Watercolor Art | 水彩艺术作品集</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'STSong', serif;
+            background: #fdfbf7;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: none;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Gallery */
+        .container {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .artwork-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .artwork-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .artwork-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .artwork-info {
+            padding: 1.5rem;
+        }
+
+        .artwork-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .artwork-category {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #667eea;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .artwork-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox img {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: 8px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+        }
+
+        .lightbox-info {
+            background: white;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* About Section */
+        .about-section {
+            background: white;
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .about-section h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .about-section p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact */
+        .contact-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .contact-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .nav-container {
+                gap: 1rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Chan's Watercolor Art</h1>
+        <p>探索水彩的诗意与色彩</p>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <button class="filter-btn active" data-category="all">全部作品</button>
+            <button class="filter-btn" data-category="flowers">花卉</button>
+            <button class="filter-btn" data-category="sketches">速写</button>
+            <button class="filter-btn" data-category="landscapes">风景</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="gallery" id="gallery">
+            <!-- Artwork cards will be inserted here -->
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h2>关于艺术家</h2>
+        <p>欢迎来到我的水彩艺术世界。我热衷于用水彩捕捉生活中的美好瞬间，从绚烂的花卉到日常的速写，每一幅作品都承载着我对色彩和光影的理解。</p>
+        <p>水彩的流动性和不可预测性让每次创作都充满惊喜。我希望通过这些作品，与您分享水彩艺术的独特魅力。</p>
+        <p>如果您对任何作品感兴趣或想要定制作品，欢迎随时联系我。</p>
+    </div>
+
+    <div class="contact-section">
+        <h2>联系我</h2>
+        <p>作品咨询 | 定制委托 | 合作洽谈</p>
+        <a href="mailto:chanwang15@example.com" class="contact-btn">发送邮件</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Chan's Watercolor Art. All rights reserved.</p>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-info">
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-description"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample artwork data - 你可以替换成真实的作品数据
+        const artworks = [
+            {
+                id: 1,
+                title: '春日牡丹',
+                category: 'flowers',
+                image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800',
+                description: '盛开的牡丹，层层叠叠的花瓣展现着春天的生机'
+            },
+            {
+                id: 2,
+                title: '街角咖啡馆',
+                category: 'sketches',
+                image: 'https://images.unsplash.com/photo-1501482263322-6330ae5814e7?w=800',
+                description: '午后阳光下的街角，快速捕捉的都市瞬间'
+            },
+            {
+                id: 3,
+                title: '紫藤花开',
+                category: 'flowers',
+                image: 'https://images.unsplash.com/photo-1464699908537-0954e50791ee?w=800',
+                description: '垂落的紫藤如瀑布般倾泻，淡紫色的梦幻'
+            },
+            {
+                id: 4,
+                title: '山间晨雾',
+                category: 'landscapes',
+                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+                description: '清晨的薄雾笼罩山间，水彩的渲染恰到好处'
+            },
+            {
+                id: 5,
+                title: '野花小径',
+                category: 'flowers',
+                image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800',
+                description: '路边的野花，简单却充满生命力'
+            },
+            {
+                id: 6,
+                title: '老城区写生',
+                category: 'sketches',
+                image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800',
+                description: '古老建筑的线条和光影记录'
+            },
+            {
+                id: 7,
+                title: '玫瑰花束',
+                category: 'flowers',
+                image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800',
+                description: '红玫瑰的热烈与柔美'
+            },
+            {
+                id: 8,
+                title: '海边日落',
+                category: 'landscapes',
+                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
+                description: '海天一色的黄昏时刻'
+            },
+            {
+                id: 9,
+                title: '市场一角',
+                category: 'sketches',
+                image: 'https://images.unsplash.com/photo-1533050487297-09b450131914?w=800',
+                description: '熙熙攘攘的市场，烟火人间'
+            }
+        ];
+
+        // Render gallery
+        function renderGallery(filterCategory = 'all') {
+            const gallery = document.getElementById('gallery');
+            const filteredArtworks = filterCategory === 'all' 
+                ? artworks 
+                : artworks.filter(art => art.category === filterCategory);
+            
+            gallery.innerHTML = filteredArtworks.map(art => `
+                <div class="artwork-card" onclick="openLightbox(${art.id})">
+                    <img src="${art.image}" alt="${art.title}" class="artwork-image">
+                    <div class="artwork-info">
+                        <span class="artwork-category">${getCategoryName(art.category)}</span>
+                        <h3 class="artwork-title">${art.title}</h3>
+                        <p class="artwork-description">${art.description}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                'flowers': '花卉',
+                'sketches': '速写',
+                'landscapes': '风景'
+            };
+            return names[category] || category;
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderGallery(btn.dataset.category);
+            });
+        });
+
+        // Lightbox
+        function openLightbox(id) {
+            const artwork = artworks.find(art => art.id === id);
+            if (artwork) {
+                document.getElementById('lightbox-img').src = artwork.image;
+                document.getElementById('lightbox-title').textContent = artwork.title;
+                document.getElementById('lightbox-description').textContent = artwork.description;
+                document.getElementById('lightbox').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close lightbox on background click
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') {
+                closeLightbox();
+            }
+        });
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        // Initial render
+        renderGallery();
+    </script>
+</body>
+</html>
